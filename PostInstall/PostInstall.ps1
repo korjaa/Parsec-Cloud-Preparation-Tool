@@ -135,12 +135,6 @@ Write-Output "Enabling Mouse Keys"
 set-Itemproperty -Path 'HKCU:\Control Panel\Accessibility\MouseKeys' -Name Flags -Value 63 | Out-Null
 }
 
-#disable shutdown start menu
-function remove-shutdown {
-Write-Output "Disabling Shutdown Option in Start Menu"
-New-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoClose -Value 1 | Out-Null
-}
-
 #Sets all applications to force close on shutdown
 function force-close-apps {
 if (((Get-Item -Path "HKCU:\Control Panel\Desktop").GetValue("AutoEndTasks") -ne $null) -eq $true) 
