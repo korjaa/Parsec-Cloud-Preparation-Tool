@@ -83,7 +83,6 @@ function create-directories {
 Write-Output "Creating Directories in C:\ Drive"
 if((Test-Path -Path C:\ParsecTemp) -eq $true) {} Else {New-Item -Path C:\ParsecTemp -ItemType directory | Out-Null}
 if((Test-Path -Path C:\ParsecTemp\Apps) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\Apps -ItemType directory | Out-Null}
-if((Test-Path -Path C:\ParsecTemp\DirectX) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\DirectX -ItemType directory | Out-Null}
 if((Test-Path -Path C:\ParsecTemp\Drivers) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\Drivers -ItemType Directory | Out-Null}
 if((Test-Path -Path C:\ParsecTemp\Devcon) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\Devcon -ItemType Directory | Out-Null}
 }
@@ -99,9 +98,6 @@ Stop-Process -Name Explorer -Force
 #download-files-S3
 function download-resources {
 Write-Output "Downloading Parsec, Google Chrome, DirectX June 2010 Redist, DevCon and GPU Updater Tool."
-Write-Host "Downloading DirectX" -NoNewline
-(New-Object System.Net.WebClient).DownloadFile("https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe", "C:\ParsecTemp\Apps\directx_Jun2010_redist.exe") 
-Write-host "`r - Success!"
 Write-Host "Downloading Devcon" -NoNewline
 (New-Object System.Net.WebClient).DownloadFile("https://s3.amazonaws.com/parsec-files-ami-setup/Devcon/devcon.exe", "C:\ParsecTemp\Devcon\devcon.exe")
 Write-host "`r - Success!"
@@ -119,11 +115,6 @@ Write-host "`r - Success!"
 function install-windows-features {
 Write-Output "Installing Google Chrome, .Net 3.5, Direct Play and DirectX Redist 2010"
 start-process -filepath "C:\Windows\System32\msiexec.exe" -ArgumentList '/qn /i "C:\ParsecTemp\Apps\googlechromestandaloneenterprise64.msi"' -Wait
-Start-Process -FilePath "C:\ParsecTemp\Apps\directx_jun2010_redist.exe" -ArgumentList '/T:C:\ParsecTemp\DirectX /Q'-wait
-Start-Process -FilePath "C:\ParsecTemp\DirectX\DXSETUP.EXE" -ArgumentList '/silent' -wait
-Install-WindowsFeature Direct-Play | Out-Null
-Install-WindowsFeature Net-Framework-Core | Out-Null
-Remove-Item -Path C:\ParsecTemp\DirectX -force -Recurse 
 }
 
 #set update policy
